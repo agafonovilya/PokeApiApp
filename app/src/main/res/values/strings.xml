@@ -3,4 +3,6 @@
     <string name="search_by_name">Search by name</string>
     <string name="random_search">Random search</string>
     <string name="favorites">Favorites</string>
+    <string name="name">Name</string>
+    <string name="pokemon_image_description">pokemon image</string>
 </resources>

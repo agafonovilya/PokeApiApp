@@ -1,11 +1,11 @@
-package ru.agafonovilya.pokeapiapp
+package ru.agafonovilya.pokeapiapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import ru.agafonovilya.pokeapiapp.R
 import ru.agafonovilya.pokeapiapp.databinding.MainActivityBinding
-import ru.agafonovilya.pokeapiapp.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            selectedFragment = MainFragment.newInstance()
-            replaceFragment(selectedFragment as MainFragment)
+            selectedFragment = ByNameFragment.newInstance()
+            replaceFragment(selectedFragment as ByNameFragment)
         }
 
     }
