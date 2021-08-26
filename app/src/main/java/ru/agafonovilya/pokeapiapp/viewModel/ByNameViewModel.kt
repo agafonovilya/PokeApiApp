@@ -5,7 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import ru.agafonovilya.pokeapiapp.model.repository.IRepository
 
 class ByNameViewModel(private val repository: IRepository) : ViewModel() {
-    // TODO: Implement the ViewModel
+
+    suspend fun getPokemonByName(name: String) : Pokemon {
+        return repository.getPokemonByName(name)
+    }
+
+    suspend fun getRandomPokemon() : Pokemon {
+        return repository.getRandomPokemon()
+    }
 }
 
 class ByNameViewModelFactory(private val repository: IRepository) : ViewModelProvider.Factory {

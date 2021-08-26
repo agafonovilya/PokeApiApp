@@ -5,10 +5,14 @@ import ru.agafonovilya.pokeapiapp.model.db.IDbRepository
 import ru.agafonovilya.pokeapiapp.model.db.PokemonDatabase
 import ru.agafonovilya.pokeapiapp.model.db.RoomDbRepository
 import ru.agafonovilya.pokeapiapp.model.repository.IRepository
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import ru.agafonovilya.pokeapiapp.model.retrofit.PokeApiService
 import ru.agafonovilya.pokeapiapp.model.repository.PokeApiRepository
 import ru.agafonovilya.pokeapiapp.util.imageLoader.GlideImageLoader
 import ru.agafonovilya.pokeapiapp.util.imageLoader.IImageLoader
+import ru.agafonovilya.pokeapiapp.view.ByNameFragment
+import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModelFactory
 
 object Injection {
 
@@ -32,6 +36,18 @@ object Injection {
     fun provideImageLoader(): IImageLoader {
         return GlideImageLoader()
     }
+
+    /**
+     * Provides the [ViewModelProvider.Factory] that is then used to get a reference to
+     * [ViewModel] objects.
+     */
+    fun provideViewModelFactory(fragment: Fragment): ViewModelProvider.Factory =
+        when(fragment::class.java) {
+            ByNameFragment::class.java -> ByNameViewModelFactory(providePokeApiRepository())
+            else -> ViewModelProvider.NewInstanceFactory()
+        }
+
+
 
 
 
