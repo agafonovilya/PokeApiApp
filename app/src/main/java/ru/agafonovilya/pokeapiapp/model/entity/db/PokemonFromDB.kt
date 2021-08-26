@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 class PokemonFromDB(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "name") val name: String
 )
