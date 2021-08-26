@@ -29,4 +29,5 @@ task clean(type: Delete) {
 ext {
     lifecycleVersion = '2.3.1'
     coroutines = '1.5.0'
+    glideVersion = '4.12.0'
 }
