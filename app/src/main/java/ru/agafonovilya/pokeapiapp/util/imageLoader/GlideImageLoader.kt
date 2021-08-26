@@ -9,7 +9,7 @@ class GlideImageLoader: IImageLoader {
         Glide.with(container.context)
             .asBitmap()
             .load(url)
-            .centerCrop()
+            .centerInside()
             .into(container)
     }
 }
