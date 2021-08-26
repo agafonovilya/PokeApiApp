@@ -8,7 +8,7 @@ import ru.agafonovilya.pokeapiapp.model.entity.db.PokemonFromDB
 
 @Dao
 interface PokemonDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPokemon(pokemonFromDB: PokemonFromDB)
 
     @Query("SELECT * FROM PokemonFromDB")
