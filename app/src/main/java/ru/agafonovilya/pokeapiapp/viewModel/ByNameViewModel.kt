@@ -2,7 +2,7 @@ package ru.agafonovilya.pokeapiapp.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.agafonovilya.pokeapiapp.repository.IRepository
+import ru.agafonovilya.pokeapiapp.model.repository.IRepository
 
 class ByNameViewModel(private val repository: IRepository) : ViewModel() {
     // TODO: Implement the ViewModel

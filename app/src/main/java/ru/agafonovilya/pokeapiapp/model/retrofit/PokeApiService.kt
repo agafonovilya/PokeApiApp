@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.agafonovilya.pokeapiapp.model.entity.Pokemon
-import ru.agafonovilya.pokeapiapp.model.entity.PokemonList
+import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
+import ru.agafonovilya.pokeapiapp.model.entity.api.PokemonList
 
 interface PokeApiService {
 
