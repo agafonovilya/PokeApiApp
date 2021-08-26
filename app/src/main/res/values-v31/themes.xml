@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PokeApiApp.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="android:windowSplashScreenAnimationDuration">500</item>
+
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_baseline_catching_pokemon_24</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.PokeApiApp</item>
+    </style>
+</resources>

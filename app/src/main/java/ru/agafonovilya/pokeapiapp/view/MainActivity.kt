@@ -3,7 +3,10 @@ package ru.agafonovilya.pokeapiapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
+import okhttp3.Dispatcher
 import ru.agafonovilya.pokeapiapp.R
 import ru.agafonovilya.pokeapiapp.databinding.MainActivityBinding
 
@@ -13,8 +16,11 @@ class MainActivity : AppCompatActivity() {
     private var selectedFragment: Fragment? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
 
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
