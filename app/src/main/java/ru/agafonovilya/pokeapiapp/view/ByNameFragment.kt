@@ -66,6 +66,7 @@ class ByNameFragment : Fragment() {
     private fun fillViews(pokemon: Pokemon) {
         binding.byNameFragmentName.text = pokemon.name
         Injection.provideImageLoader().loadInto(pokemon.sprites.other.officialArtwork.front_default, binding.byNameFragmentImage)
+        binding.byNameFragmentFavouritesButton.visibility = View.VISIBLE
     }
 
     private fun initButton() {
