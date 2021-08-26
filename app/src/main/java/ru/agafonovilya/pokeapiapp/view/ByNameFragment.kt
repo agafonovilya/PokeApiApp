@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.agafonovilya.pokeapiapp.Injection
 import ru.agafonovilya.pokeapiapp.databinding.ByNameFragmentBinding
-import ru.agafonovilya.pokeapiapp.model.entity.Pokemon
+import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModel
 
 class ByNameFragment : Fragment() {
@@ -40,6 +40,7 @@ class ByNameFragment : Fragment() {
 
         initViewModel()
         initTextInput()
+        initButton()
     }
 
     private fun initViewModel() {
@@ -65,6 +66,12 @@ class ByNameFragment : Fragment() {
     private fun fillViews(pokemon: Pokemon) {
         binding.byNameFragmentName.text = pokemon.name
         Injection.provideImageLoader().loadInto(pokemon.sprites.other.officialArtwork.front_default, binding.byNameFragmentImage)
+    }
+
+    private fun initButton() {
+        binding.byNameFragmentFavouritesButton.setOnClickListener {
+                viewModel.savePokemon()
+        }
     }
 
     override fun onDestroyView() {

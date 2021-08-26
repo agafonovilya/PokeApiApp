@@ -5,4 +5,5 @@
     <string name="favorites">Favorites</string>
     <string name="name">Name</string>
     <string name="pokemon_image_description">pokemon image</string>
+    <string name="add_to_favourites">Add to favourites</string>
 </resources>

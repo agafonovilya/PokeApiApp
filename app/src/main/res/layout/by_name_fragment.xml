@@ -60,9 +60,15 @@
              android:layout_height="wrap_content"
              android:layout_margin="@dimen/layout_margin"
              android:textSize="@dimen/characteristic_text_size" />
+
+         <com.google.android.material.button.MaterialButton
+             android:id="@+id/byNameFragment_favourites_button"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             android:text="@string/add_to_favourites"/>
       </LinearLayout>
 
    </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

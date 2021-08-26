@@ -42,13 +42,11 @@ object Injection {
      * [ViewModel] objects.
      */
     fun provideViewModelFactory(fragment: Fragment): ViewModelProvider.Factory =
-        when(fragment::class.java) {
-            ByNameFragment::class.java -> ByNameViewModelFactory(providePokeApiRepository())
+        when (fragment::class.java) {
+            ByNameFragment::class.java -> ByNameViewModelFactory(providePokeApiRepository(),
+                provideDatabaseRepository(fragment.requireContext()))
             else -> ViewModelProvider.NewInstanceFactory()
         }
-
-
-
 
 
 }
