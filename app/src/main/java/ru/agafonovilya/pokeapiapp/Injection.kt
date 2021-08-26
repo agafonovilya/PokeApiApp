@@ -16,6 +16,14 @@ object Injection {
         return PokeApiRepository(PokeApiService.create())
     }
 
-
+    /**
+     * Provides the [ViewModelProvider.Factory] that is then used to get a reference to
+     * [ViewModel] objects.
+     */
+    fun provideViewModelFactory(fragment: Fragment): ViewModelProvider.Factory =
+        when(fragment::class.java) {
+            ByNameFragment::class.java -> ByNameViewModelFactory(providePokeApiRepository())
+            else -> ViewModelProvider.NewInstanceFactory()
+        }
 
 }

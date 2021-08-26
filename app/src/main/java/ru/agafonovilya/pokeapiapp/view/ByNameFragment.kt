@@ -6,7 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import ru.agafonovilya.pokeapiapp.Injection
 import ru.agafonovilya.pokeapiapp.databinding.ByNameFragmentBinding
+import ru.agafonovilya.pokeapiapp.model.entity.Pokemon
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModel
 
 class ByNameFragment : Fragment() {
@@ -19,6 +24,8 @@ class ByNameFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ByNameViewModel
+    private var requestJob: Job? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,15 +43,27 @@ class ByNameFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this, Injection.provideViewmodelFactory(this))
+        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory(this))
             .get(ByNameViewModel::class.java)
     }
 
     private fun initTextInput() {
         binding.byNameFragmentTextInputLayout.setEndIconOnClickListener {
             val searchName = binding.byNameFragmentTextInputEditText.text.toString()
-            // TODO: 24.08.2021   data request
+            request(searchName)
         }
+    }
+
+    private fun request(name: String) {
+        requestJob?.cancel()
+        requestJob = lifecycleScope.launch {
+            val pokemon = viewModel.getPokemonByName(name)
+            fillViews(pokemon)
+        }
+    }
+
+    private fun fillViews(pokemon: Pokemon) {
+        binding.byNameFragmentName.text = pokemon.name
     }
 
     override fun onDestroyView() {
