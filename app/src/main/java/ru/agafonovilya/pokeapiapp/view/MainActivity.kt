@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.search_by_name -> { showToast("search_by_name") }
-                R.id.random_search -> { showToast("random_search") }
+                R.id.search_by_name -> replaceFragment(ByNameFragment.newInstance())
+                R.id.random_search -> replaceFragment(RandomPokemonFragment.newInstance())
                 R.id.favorites -> { showToast("favorites") }
             }
             selectedFragment?.let { replaceFragment(it) }
