@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import kotlinx.coroutines.*
 import okhttp3.Dispatcher
 import ru.agafonovilya.pokeapiapp.R
@@ -25,29 +27,24 @@ class MainActivity : AppCompatActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navOptions = navOptions {
+            anim {
+                enter = R.anim.fade_in
+                exit - R.anim.fade_out
+            }
+        }
+
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.search_by_name -> replaceFragment(ByNameFragment.newInstance())
-                R.id.random_search -> replaceFragment(RandomPokemonFragment.newInstance())
+                R.id.search_by_name -> findNavController(R.id.my_nav_host_fragment).navigate(R.id.destination_byNameFragment, null, navOptions)
+                R.id.random_search -> findNavController(R.id.my_nav_host_fragment).navigate(R.id.destination_randomPokemonFragment, null, navOptions)
                 R.id.favorites -> { showToast("favorites") }
             }
-            selectedFragment?.let { replaceFragment(it) }
             true
         }
 
-        if (savedInstanceState == null) {
-            selectedFragment = ByNameFragment.newInstance()
-            replaceFragment(selectedFragment as ByNameFragment)
-        }
-
     }
 
-    private fun replaceFragment(fragment: Fragment){
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit()
-    }
 
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

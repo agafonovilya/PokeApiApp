@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/destination_byNameFragment">
+
+    <fragment
+        android:id="@+id/destination_byNameFragment"
+        android:name="ru.agafonovilya.pokeapiapp.view.ByNameFragment"
+        android:label="by_name_fragment"
+        tools:layout="@layout/by_name_fragment" >
+
+        <action
+            android:id="@+id/action_to_random_fragment"
+            app:destination="@id/destination_randomPokemonFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_randomPokemonFragment"
+        android:name="ru.agafonovilya.pokeapiapp.view.RandomPokemonFragment"
+        android:label="random_pokemon_fragment"
+        tools:layout="@layout/random_pokemon_fragment">
+
+        <action
+            android:id="@+id/action_to_by_name_fragment"
+            app:destination="@id/destination_byNameFragment"/>
+
+
+    </fragment>
+
+</navigation>
