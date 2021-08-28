@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 @Entity(indices = [Index(value = ["name"], unique = true)])
 class PokemonFromDB(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "name") val name: String
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "imageUrl") val imageUrl: String
 )
