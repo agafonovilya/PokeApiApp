@@ -9,24 +9,16 @@
         android:id="@+id/destination_byNameFragment"
         android:name="ru.agafonovilya.pokeapiapp.view.ByNameFragment"
         android:label="by_name_fragment"
-        tools:layout="@layout/by_name_fragment" >
-
-        <action
-            android:id="@+id/action_to_random_fragment"
-            app:destination="@id/destination_randomPokemonFragment"/>
-    </fragment>
-
+        tools:layout="@layout/by_name_fragment" />
     <fragment
         android:id="@+id/destination_randomPokemonFragment"
         android:name="ru.agafonovilya.pokeapiapp.view.RandomPokemonFragment"
         android:label="random_pokemon_fragment"
-        tools:layout="@layout/random_pokemon_fragment">
-
-        <action
-            android:id="@+id/action_to_by_name_fragment"
-            app:destination="@id/destination_byNameFragment"/>
-
-
-    </fragment>
+        tools:layout="@layout/random_pokemon_fragment"/>
+    <fragment
+        android:id="@+id/destination_favoritesFragment"
+        android:name="ru.agafonovilya.pokeapiapp.view.FavoritesFragment"
+        android:label="favorites_fragment"
+        tools:layout="@layout/favorites_fragment" />
 
 </navigation>
