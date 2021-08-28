@@ -7,7 +7,7 @@ import ru.agafonovilya.pokeapiapp.Injection
 import ru.agafonovilya.pokeapiapp.databinding.FavoritesItemBinding
 import ru.agafonovilya.pokeapiapp.model.entity.db.PokemonFromDB
 
-class FavoritesAdapter: RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
+class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
 
     var pokemonList: List<PokemonFromDB> = listOf()
         set(value) {
@@ -16,7 +16,8 @@ class FavoritesAdapter: RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolde
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesViewHolder {
-        val binding = FavoritesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            FavoritesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FavoritesViewHolder(binding)
     }
 
@@ -26,14 +27,14 @@ class FavoritesAdapter: RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolde
 
     override fun getItemCount() = pokemonList.size
 
-
-
-    inner class FavoritesViewHolder(private val binding: FavoritesItemBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class FavoritesViewHolder(private val binding: FavoritesItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         private val imageLoader = Injection.provideImageLoader()
 
         fun bind(pokemonFromDB: PokemonFromDB) {
             binding.pokemonItemName.text = pokemonFromDB.name
+            imageLoader.loadInto(pokemonFromDB.imageUrl, binding.pokemonItemImage)
         }
     }
 }

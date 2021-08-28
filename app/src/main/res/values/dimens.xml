@@ -3,4 +3,5 @@
     <dimen name="name_text_size">16sp</dimen>
     <dimen name="layout_margin">16dp</dimen>
     <dimen name="characteristic_text_size">16sp</dimen>
+    <dimen name="pokemon_name_text_size">32sp</dimen>
 </resources>
