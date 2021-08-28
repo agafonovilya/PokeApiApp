@@ -12,8 +12,10 @@ import ru.agafonovilya.pokeapiapp.model.repository.PokeApiRepository
 import ru.agafonovilya.pokeapiapp.util.imageLoader.GlideImageLoader
 import ru.agafonovilya.pokeapiapp.util.imageLoader.IImageLoader
 import ru.agafonovilya.pokeapiapp.view.ByNameFragment
+import ru.agafonovilya.pokeapiapp.view.FavoritesFragment
 import ru.agafonovilya.pokeapiapp.view.RandomPokemonFragment
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModelFactory
+import ru.agafonovilya.pokeapiapp.viewModel.FavoritesViewModelFactory
 import ru.agafonovilya.pokeapiapp.viewModel.RandomPokemonViewModelFactory
 
 object Injection {
@@ -49,6 +51,8 @@ object Injection {
                 provideDatabaseRepository(fragment.requireContext()))
             RandomPokemonFragment::class.java -> RandomPokemonViewModelFactory(
                 providePokeApiRepository(), provideDatabaseRepository(fragment.requireContext()))
+            FavoritesFragment::class.java -> FavoritesViewModelFactory(provideDatabaseRepository(
+                fragment.requireContext()))
             else -> ViewModelProvider.NewInstanceFactory()
         }
 
