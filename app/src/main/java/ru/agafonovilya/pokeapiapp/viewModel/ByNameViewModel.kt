@@ -15,6 +15,7 @@ class ByNameViewModel(
 ) : ViewModel() {
 
     private var lastPokemon: Pokemon? = null
+    private var pokemonNameList: List<String>? = null
 
     suspend fun getPokemonByName(name: String): Pokemon {
         return repository.getPokemonByName(name).also { lastPokemon = it }
@@ -23,10 +24,15 @@ class ByNameViewModel(
     fun savePokemon() {
         lastPokemon?.let {
             viewModelScope.launch {
-                dbRepository.savePokemon(PokemonFromDB(name = it.name))
+                dbRepository.savePokemon(PokemonFromDB(name = it.name, imageUrl = it.sprites.other.officialArtwork.front_default))
             }
         }
     }
+
+    suspend fun getItemsForAutoCompleteTextView(): List<String> {
+        return repository.getListPokemonName().also { pokemonNameList = it }
+    }
+
 }
 
 class ByNameViewModelFactory(

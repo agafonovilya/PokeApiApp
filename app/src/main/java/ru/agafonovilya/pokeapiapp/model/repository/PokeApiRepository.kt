@@ -1,6 +1,8 @@
 package ru.agafonovilya.pokeapiapp.model.repository
 
+import android.util.Log
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
+import ru.agafonovilya.pokeapiapp.model.entity.api.PokemonList
 import ru.agafonovilya.pokeapiapp.model.retrofit.PokeApiService
 import kotlin.random.Random
 
@@ -17,9 +19,9 @@ class PokeApiRepository(private val apiService: PokeApiService): IRepository {
     }
 
     override suspend fun getListPokemonName(): List<String> {
-        val pokemonList = apiService.getPokemonList()
+        val pokemonList: PokemonList = apiService.getPokemonList()
         val pokemonNameList = mutableListOf<String>()
-        for(i in 0 until pokemonList.count) {
+        for(i in 0 until (pokemonList.count)) {
             pokemonNameList.add(pokemonList.results[i].name)
         }
         return pokemonNameList
