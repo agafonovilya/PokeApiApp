@@ -1,31 +1,30 @@
 package ru.agafonovilya.pokeapiapp.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.agafonovilya.pokeapiapp.Injection
+import ru.agafonovilya.pokeapiapp.R
 import ru.agafonovilya.pokeapiapp.databinding.ByNameFragmentBinding
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModel
+import java.util.*
 
 class ByNameFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = ByNameFragment()
-    }
 
     private var _binding: ByNameFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ByNameViewModel
     private var requestJob: Job? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +47,21 @@ class ByNameFragment : Fragment() {
             .get(ByNameViewModel::class.java)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initTextInput() {
+        lifecycleScope.launch {
+            val items = viewModel.getItemsForAutoCompleteTextView()
+            val adapter = ArrayAdapter(requireContext(),R.layout.auto_complete_text_view_item, items)
+            binding.byNameFragmentAutoCompleteTextView.setAdapter(adapter)
+        }
+
+        binding.byNameFragmentAutoCompleteTextView.setOnTouchListener { view, motionEvent ->
+            binding.byNameFragmentAutoCompleteTextView.showDropDown()
+            return@setOnTouchListener false
+        }
+
         binding.byNameFragmentTextInputLayout.setEndIconOnClickListener {
-            val searchName = binding.byNameFragmentTextInputEditText.text.toString()
+            val searchName = binding.byNameFragmentAutoCompleteTextView.text.toString().lowercase().trim()
             request(searchName)
         }
     }

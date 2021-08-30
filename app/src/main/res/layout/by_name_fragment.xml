@@ -18,13 +18,15 @@
        app:endIconMode="custom"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toTopOf="parent">
+       app:layout_constraintTop_toTopOf="parent"
+       style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
 
-      <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/byNameFragment_text_input_edit_text"
+      <com.google.android.material.textfield.MaterialAutoCompleteTextView
+          android:id="@+id/byNameFragment_auto_complete_text_view"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:inputType="text"/>
+          android:inputType="textAutoComplete"
+          android:completionThreshold="0"/>
 
    </com.google.android.material.textfield.TextInputLayout>
 

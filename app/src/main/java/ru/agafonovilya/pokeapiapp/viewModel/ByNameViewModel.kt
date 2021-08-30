@@ -20,10 +20,6 @@ class ByNameViewModel(
         return repository.getPokemonByName(name).also { lastPokemon = it }
     }
 
-    suspend fun getRandomPokemon(): Pokemon {
-        return repository.getRandomPokemon().also { lastPokemon = it }
-    }
-
     fun savePokemon() {
         lastPokemon?.let {
             viewModelScope.launch {
