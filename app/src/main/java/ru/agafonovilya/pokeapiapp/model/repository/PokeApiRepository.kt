@@ -11,9 +11,17 @@ class PokeApiRepository(private val apiService: PokeApiService): IRepository {
     }
 
     override suspend fun getRandomPokemon(): Pokemon {
-        val pokemonList = apiService.getPokemonList()
+        val pokemonList = apiService.getPokemonCount()
         val random = Random.nextInt(pokemonList.count)
         return apiService.getPokemonById(random)
     }
 
+    override suspend fun getListPokemonName(): List<String> {
+        val pokemonList = apiService.getPokemonList()
+        val pokemonNameList = mutableListOf<String>()
+        for(i in 0 until pokemonList.count) {
+            pokemonNameList.add(pokemonList.results[i].name)
+        }
+        return pokemonNameList
+    }
 }

@@ -30,16 +30,25 @@ interface PokeApiService {
     ): Pokemon
 
     /**
+     * Get total count
+     */
+    @GET("pokemon-species/")
+    suspend fun getPokemonCount(
+        @Query("limit") limit: Int = LIMIT_FOR_GET_TOTAL_COUNT
+    ): PokemonList
+
+    /**
      * Get total count and name
      */
     @GET("pokemon-species/")
     suspend fun getPokemonList(
-        @Query("limit") limit: Int = LIMIT_FOR_GET_TOTAL_COUNT
+        @Query("limit") limit: Int = LIMIT_FOR_GET_ALL_NAME
     ): PokemonList
 
     companion object {
         private const val BASE_URL = "https://pokeapi.co/api/v2/"
         private const val LIMIT_FOR_GET_TOTAL_COUNT = 0
+        private const val LIMIT_FOR_GET_ALL_NAME = 0
 
         fun create(): PokeApiService {
             val logger = HttpLoggingInterceptor()
