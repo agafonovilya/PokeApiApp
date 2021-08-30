@@ -23,7 +23,7 @@ class RandomPokemonViewModel(
     fun savePokemon() {
         lastPokemon?.let {
             viewModelScope.launch {
-                dbRepository.savePokemon(PokemonFromDB(name = it.name))
+                dbRepository.savePokemon(PokemonFromDB(name = it.name, imageUrl = it.sprites.other.officialArtwork.front_default))
             }
         }
     }
