@@ -1,5 +1,6 @@
 package ru.agafonovilya.pokeapiapp.model.db
 
+import ru.agafonovilya.pokeapiapp.model.entity.RepoResult
 import ru.agafonovilya.pokeapiapp.model.entity.db.PokemonFromDB
 
 class RoomDbRepository(db: PokemonDatabase): IDbRepository {
@@ -10,7 +11,12 @@ class RoomDbRepository(db: PokemonDatabase): IDbRepository {
         pokemonDao.insertPokemon(pokemonFromDB)
     }
 
-    override suspend fun getAllPokemons(): List<PokemonFromDB> {
-        return pokemonDao.getAllPokemon()
+    override suspend fun getAllPokemon(): RepoResult<List<PokemonFromDB>> {
+        return try {
+            val pokemonList = pokemonDao.getAllPokemon()
+            RepoResult.Success(pokemonList)
+        } catch (e: Exception) {
+            RepoResult.Error(e)
+        }
     }
 }
