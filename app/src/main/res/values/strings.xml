@@ -8,4 +8,7 @@
     <string name="add_to_favourites">Add to favourites</string>
     <string name="refresh">Refresh</string>
     <string name="error_loading_pokemon_list">Error loading pokemon list</string>
+    <string name="check_name">The request failed. Check the requested Pokemon name</string>
+    <string name="error_list_pokemon_name">Error getting array of pokemon names. Check your internet connection</string>
+    <string name="error_list_pokemon_from_db">Database read error</string>
 </resources>

@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 import ru.agafonovilya.pokeapiapp.Injection
 import ru.agafonovilya.pokeapiapp.R
 import ru.agafonovilya.pokeapiapp.databinding.ByNameFragmentBinding
-import ru.agafonovilya.pokeapiapp.model.entity.Result
+import ru.agafonovilya.pokeapiapp.model.entity.DataCode
+import ru.agafonovilya.pokeapiapp.model.entity.ViewModelResult
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModel
 import java.util.*
@@ -49,28 +50,6 @@ class ByNameFragment : Fragment() {
         observeToData()
     }
 
-    private fun observeToData() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    when (it) {
-                        is Result.Loading -> {
-                        }
-                        is Result.Success -> {
-                            renderData(it.pokemon)
-                        }
-                        is Result.Error -> {
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun renderData(pokemon: Pokemon) {
-        fillViews(pokemon)
-    }
-
     private fun initViewModel() {
         viewModel = ViewModelProvider(this, Injection.provideViewModelFactory(this))
             .get(ByNameViewModel::class.java)
@@ -79,19 +58,9 @@ class ByNameFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initTextInput() {
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.itemsForAutoCompleteTextView.collect {
-                if (it.isNullOrEmpty()) {
-                    showSnackbar(getString(R.string.error_loading_pokemon_list))
-                } else {
-                    val adapter =
-                        ArrayAdapter(requireContext(), R.layout.auto_complete_text_view_item, it)
-                    binding.byNameFragmentAutoCompleteTextView.setAdapter(adapter)
-                }
-            }
-        }
+        viewModel.getItemsForAutoCompleteTextView()
 
-        binding.byNameFragmentAutoCompleteTextView.setOnTouchListener { view, motionEvent ->
+        binding.byNameFragmentAutoCompleteTextView.setOnTouchListener { _, _ ->
             binding.byNameFragmentAutoCompleteTextView.showDropDown()
             return@setOnTouchListener false
         }
@@ -105,13 +74,49 @@ class ByNameFragment : Fragment() {
         }
     }
 
-    private fun hideKeyboard() {
-        val imm =
-            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.byNameFragmentAutoCompleteTextView.windowToken, 0)
+    private fun initButton() {
+        binding.byNameFragmentFavouritesButton.setOnClickListener {
+            viewModel.savePokemon()
+        }
     }
 
-    private fun fillViews(pokemon: Pokemon) {
+    private fun observeToData() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    when (it) {
+                        is ViewModelResult.Loading -> {
+                        }
+                        is ViewModelResult.Success<*> -> {
+                            renderSuccessData(it)
+                        }
+                        is ViewModelResult.Error -> {
+                            it.error.message?.let { message -> showSnackbar(message) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun renderSuccessData(data: ViewModelResult.Success<*>) {
+        when (data.dataCode) {
+            DataCode.POKEMON -> {
+                renderPokemonData(data.data as Pokemon)
+            }
+            DataCode.LIST_OF_POKEMON_NAME -> {
+                renderListOfPokemonName(data.data as List<String>)
+            }
+        }
+    }
+
+    private fun renderListOfPokemonName(items: List<String>) {
+        val adapter =
+            ArrayAdapter(requireContext(), R.layout.auto_complete_text_view_item, items)
+        binding.byNameFragmentAutoCompleteTextView.setAdapter(adapter)
+    }
+
+    private fun renderPokemonData(pokemon: Pokemon) {
         binding.byNameFragmentName.text = pokemon.name
         Injection.provideImageLoader()
             .loadInto(pokemon.sprites.other.officialArtwork.front_default,
@@ -119,13 +124,13 @@ class ByNameFragment : Fragment() {
         binding.byNameFragmentFavouritesButton.visibility = View.VISIBLE
     }
 
-    private fun initButton() {
-        binding.byNameFragmentFavouritesButton.setOnClickListener {
-            viewModel.savePokemon()
-        }
+    private fun hideKeyboard() {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.byNameFragmentAutoCompleteTextView.windowToken, 0)
     }
 
-    fun showSnackbar(message: String) {
+    private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
