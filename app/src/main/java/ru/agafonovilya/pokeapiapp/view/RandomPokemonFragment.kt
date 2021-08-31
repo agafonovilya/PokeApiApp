@@ -5,33 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Job
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.agafonovilya.pokeapiapp.Injection
 import ru.agafonovilya.pokeapiapp.databinding.RandomPokemonFragmentBinding
+import ru.agafonovilya.pokeapiapp.model.entity.DataCode
+import ru.agafonovilya.pokeapiapp.model.entity.ViewModelResult
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
 import ru.agafonovilya.pokeapiapp.viewModel.RandomPokemonViewModel
 
 class RandomPokemonFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = RandomPokemonFragment()
-    }
-
     private var _binding: RandomPokemonFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: RandomPokemonViewModel
-    private var requestJob: Job? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = RandomPokemonFragmentBinding.inflate(inflater,container, false)
+        _binding = RandomPokemonFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,7 +39,7 @@ class RandomPokemonFragment : Fragment() {
 
         initViewModel()
         initButton()
-        request()
+        observeToData()
     }
 
     private fun initViewModel() {
@@ -48,28 +47,48 @@ class RandomPokemonFragment : Fragment() {
             .get(RandomPokemonViewModel::class.java)
     }
 
-    private fun request() {
-        requestJob?.cancel()
-        requestJob = lifecycleScope.launch {
-            val pokemon = viewModel.getRandomPokemon()
-            fillViews(pokemon)
-        }
-    }
-
-    private fun fillViews(pokemon: Pokemon) {
-        binding.randomPokemonFragmentName.text = pokemon.name
-        Injection.provideImageLoader().loadInto(pokemon.sprites.other.officialArtwork.front_default, binding.randomPokemonFragmentImage)
-        binding.randomPokemonFragmentFavouritesButton.visibility = View.VISIBLE
-    }
-
     private fun initButton() {
         binding.randomPokemonFragmentRefreshButton.setOnClickListener {
-            request()
+            viewModel.getRandomPokemon()
         }
 
         binding.randomPokemonFragmentFavouritesButton.setOnClickListener {
             viewModel.savePokemon()
         }
+    }
+
+    private fun observeToData() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    when (it) {
+                        is ViewModelResult.Loading -> {
+                        }
+                        is ViewModelResult.Success<*> -> {
+                            renderSuccessData(it)
+                        }
+                        is ViewModelResult.Error -> {
+                            it.error.message?.let { message -> showSnackbar(message) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun renderSuccessData(data: ViewModelResult.Success<*>) {
+        if (data.dataCode == DataCode.POKEMON) {
+            val pokemon = data.data as Pokemon
+            binding.randomPokemonFragmentName.text = pokemon.name
+            Injection.provideImageLoader()
+                .loadInto(pokemon.sprites.other.officialArtwork.front_default,
+                    binding.randomPokemonFragmentImage)
+            binding.randomPokemonFragmentFavouritesButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
