@@ -9,19 +9,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.agafonovilya.pokeapiapp.Injection
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.agafonovilya.pokeapiapp.R
 import ru.agafonovilya.pokeapiapp.databinding.ByNameFragmentBinding
 import ru.agafonovilya.pokeapiapp.model.entity.DataCode
 import ru.agafonovilya.pokeapiapp.model.entity.ViewModelResult
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
+import ru.agafonovilya.pokeapiapp.util.imageLoader.IImageLoader
 import ru.agafonovilya.pokeapiapp.viewModel.ByNameViewModel
 import java.util.*
 
@@ -31,7 +30,8 @@ class ByNameFragment : Fragment() {
     private var _binding: ByNameFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: ByNameViewModel
+    private val viewModel: ByNameViewModel by viewModel()
+    private val imageLoader: IImageLoader by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,15 +44,9 @@ class ByNameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
         initTextInput()
         initButton()
         observeToData()
-    }
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory(this))
-            .get(ByNameViewModel::class.java)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -118,9 +112,8 @@ class ByNameFragment : Fragment() {
 
     private fun renderPokemonData(pokemon: Pokemon) {
         binding.byNameFragmentName.text = pokemon.name
-        Injection.provideImageLoader()
-            .loadInto(pokemon.sprites.other.officialArtwork.front_default,
-                binding.byNameFragmentImage)
+        imageLoader.loadInto(pokemon.sprites.other.officialArtwork.front_default,
+            binding.byNameFragmentImage)
         binding.byNameFragmentFavouritesButton.visibility = View.VISIBLE
     }
 

@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.agafonovilya.pokeapiapp.Injection
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.agafonovilya.pokeapiapp.databinding.RandomPokemonFragmentBinding
 import ru.agafonovilya.pokeapiapp.model.entity.DataCode
 import ru.agafonovilya.pokeapiapp.model.entity.ViewModelResult
 import ru.agafonovilya.pokeapiapp.model.entity.api.Pokemon
+import ru.agafonovilya.pokeapiapp.util.imageLoader.IImageLoader
 import ru.agafonovilya.pokeapiapp.viewModel.RandomPokemonViewModel
 
 class RandomPokemonFragment : Fragment() {
@@ -24,7 +25,8 @@ class RandomPokemonFragment : Fragment() {
     private var _binding: RandomPokemonFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: RandomPokemonViewModel
+    private val viewModel: RandomPokemonViewModel by viewModel()
+    private val imageLoader: IImageLoader by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,14 +39,8 @@ class RandomPokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
         initButton()
         observeToData()
-    }
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory(this))
-            .get(RandomPokemonViewModel::class.java)
     }
 
     private fun initButton() {
@@ -80,8 +76,7 @@ class RandomPokemonFragment : Fragment() {
         if (data.dataCode == DataCode.POKEMON) {
             val pokemon = data.data as Pokemon
             binding.randomPokemonFragmentName.text = pokemon.name
-            Injection.provideImageLoader()
-                .loadInto(pokemon.sprites.other.officialArtwork.front_default,
+            imageLoader.loadInto(pokemon.sprites.other.officialArtwork.front_default,
                     binding.randomPokemonFragmentImage)
             binding.randomPokemonFragmentFavouritesButton.visibility = View.VISIBLE
         }

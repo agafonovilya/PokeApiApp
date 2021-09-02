@@ -31,4 +31,5 @@ ext {
     coroutines = '1.5.0'
     glideVersion = '4.12.0'
     roomVersion = '2.3.0'
+    koinVersion = '2.0.1'
 }

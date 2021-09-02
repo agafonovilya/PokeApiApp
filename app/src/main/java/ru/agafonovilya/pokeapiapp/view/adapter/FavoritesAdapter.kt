@@ -3,9 +3,11 @@ package ru.agafonovilya.pokeapiapp.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.agafonovilya.pokeapiapp.Injection
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import ru.agafonovilya.pokeapiapp.databinding.FavoritesItemBinding
 import ru.agafonovilya.pokeapiapp.model.entity.db.PokemonFromDB
+import ru.agafonovilya.pokeapiapp.util.imageLoader.IImageLoader
 
 class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
 
@@ -28,9 +30,9 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHold
     override fun getItemCount() = pokemonList.size
 
     inner class FavoritesViewHolder(private val binding: FavoritesItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), KoinComponent {
 
-        private val imageLoader = Injection.provideImageLoader()
+        private val imageLoader: IImageLoader by inject()
 
         fun bind(pokemonFromDB: PokemonFromDB) {
             binding.pokemonItemName.text = pokemonFromDB.name

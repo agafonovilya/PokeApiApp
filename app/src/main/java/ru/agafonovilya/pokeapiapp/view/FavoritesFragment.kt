@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.agafonovilya.pokeapiapp.Injection
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.agafonovilya.pokeapiapp.databinding.FavoritesFragmentBinding
 import ru.agafonovilya.pokeapiapp.model.entity.DataCode
 import ru.agafonovilya.pokeapiapp.model.entity.ViewModelResult
@@ -26,7 +25,7 @@ class FavoritesFragment: Fragment()  {
     private var _binding: FavoritesFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: FavoritesViewModel
+    private val viewModel: FavoritesViewModel by viewModel()
     private lateinit var favoritesAdapter: FavoritesAdapter
 
     override fun onCreateView(
@@ -41,15 +40,9 @@ class FavoritesFragment: Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
         initRecyclerView()
         observeToData()
         request()
-    }
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory(this))
-            .get(FavoritesViewModel::class.java)
     }
 
     private fun initRecyclerView() {
